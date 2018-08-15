@@ -1,5 +1,5 @@
 //
-//  PostTableViewCell.swift
+//  PostCommentTableViewCell.swift
 //  TaskO
 //
 //  Created by Ulan Nurmamatov on 8/15/18.
@@ -8,12 +8,11 @@
 
 import UIKit
 
-class PostTableViewCell: BaseTableViewCell<Post> {
-    private let titleLabel: UILabel = {
+class PostCommentTableViewCell: BaseTableViewCell<Comment> {
+    private let nameLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.textAlignment = .center
         return label
     }()
     
@@ -21,7 +20,6 @@ class PostTableViewCell: BaseTableViewCell<Post> {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.textAlignment = .center
         return label
     }()
     
@@ -29,14 +27,14 @@ class PostTableViewCell: BaseTableViewCell<Post> {
         selectionStyle = .none
     }
     
-    override func configure(data: Post) {
-        titleLabel.text = data.title
+    override func configure(data: Comment) {
+        nameLabel.text = data.name + ":"
         bodyLabel.text = data.body
     }
     
     override func setupViews() {
-        addSubViews([titleLabel, bodyLabel])
-        titleLabel.top(to: topAnchor, constant: 16).leading(to: leadingAnchor, constant: 16).trailing(to: trailingAnchor, constant: 8).bottom(to: bodyLabel.topAnchor, constant: 8)
+        addSubViews([nameLabel, bodyLabel])
+        nameLabel.top(to: topAnchor, constant: 16).leading(to: leadingAnchor, constant: 16).trailing(to: trailingAnchor, constant: 8).bottom(to: bodyLabel.topAnchor, constant: 8)
         bodyLabel.bottom(to: bottomAnchor, constant: 16).leading(to: leadingAnchor, constant: 16).trailing(to: trailingAnchor, constant: 8)
     }
 }

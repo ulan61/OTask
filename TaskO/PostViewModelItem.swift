@@ -9,15 +9,10 @@
 import Foundation
 
 class PostViewModelItem {
-    var data: AnyObject!
+    var data: AnyObject
+    var dataType: PostDataType
     init(data: AnyObject) {
         self.data = data
-    }
-    
-    func hasWeather() -> Bool {
-        if data is Weather {
-            return true
-        }
-        return false
+        dataType = data is Weather ? .weather : .post
     }
 }

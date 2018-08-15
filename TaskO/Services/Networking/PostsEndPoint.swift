@@ -12,12 +12,15 @@ enum PostsEndPoint: ApiConfiguration {
     
     case getPosts
     case getWeather
+    case getComments(postId:Int)
 
     var method: HTTPMethod {
         switch self {
         case .getPosts:
             return .get
         case .getWeather:
+            return .get
+        case .getComments:
             return .get
         }
     }
@@ -29,6 +32,8 @@ enum PostsEndPoint: ApiConfiguration {
         case .getWeather:
             return [URLQueryItem(name: "id", value: "\(BISHKEK_ID),\(CHOLPON_ATA_ID),\(NARYN_ID),\(OSH_ID)"),
                     URLQueryItem(name: "appid", value: "e72ca729af228beabd5d20e3b7749713")]
+        case .getComments:
+            return nil
         }
     }
     
@@ -38,6 +43,8 @@ enum PostsEndPoint: ApiConfiguration {
             return "/posts"
         case .getWeather:
             return "/data/2.5/group"
+        case .getComments(let postId):
+            return "/posts/\(postId)/comments"
         }
     }
     
@@ -47,13 +54,15 @@ enum PostsEndPoint: ApiConfiguration {
             return nil
         case .getWeather:
             return nil
+        case .getComments:
+            return nil
         }
     }
     
     func asURLRequest() throws -> URLRequest {
         var urlComponents = URLComponents(string:"")!
         switch self {
-        case .getPosts:
+        case .getPosts, .getComments:
             urlComponents = URLComponents(string: BASE_URL + path)!
         case .getWeather:
             urlComponents = URLComponents(string: WEATHER_BASE_URL + path)!
@@ -67,10 +76,7 @@ enum PostsEndPoint: ApiConfiguration {
         var urlRequest = URLRequest(url: url)
         
         urlRequest.httpMethod = method.rawValue
-        
-        // Common Headers
-//        urlRequest.setValue(ContentType.json.rawValue, forHTTPHeaderField: HTTPHeaderField.contentType.rawValue)
-        
+                
         if let parameters = parameters {
             do {
                 urlRequest.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: [])

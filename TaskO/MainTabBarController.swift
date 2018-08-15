@@ -19,7 +19,7 @@ class MainTabBarController: UITabBarController {
         let postsTabBarItem = UITabBarItem(title: "Посты", image: #imageLiteral(resourceName: "posts"), tag: 0)
         postsViewController.tabBarItem = postsTabBarItem
         
-        let albumsViewController = UINavigationController(rootViewController: UIViewController())
+        let albumsViewController = UINavigationController(rootViewController: AlbumsViewController())
         let albumsTabBarItem = UITabBarItem(title: "Альбомы", image: #imageLiteral(resourceName: "albums"), tag: 1)
         albumsViewController.tabBarItem = albumsTabBarItem
         

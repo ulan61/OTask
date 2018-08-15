@@ -41,11 +41,12 @@ extension PostsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel.items[indexPath.row]
-        if item.hasWeather() {
+        switch item.dataType {
+        case .weather:
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: WeatherTableViewCell.self), for: indexPath) as! WeatherTableViewCell
             cell.configure(data: item.data as! Weather)
             return cell
-        } else {
+        case .post:
             let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: PostTableViewCell.self), for: indexPath) as! PostTableViewCell
             cell.configure(data: item.data as! Post)
             return cell
@@ -56,8 +57,21 @@ extension PostsViewController: UITableViewDataSource {
 extension PostsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = viewModel.items[indexPath.row]
-        if item.hasWeather() {
+        switch item.dataType {
+        case .weather:
             present(SFSafariViewController(url: URL(string: "https://o.kg/ru/chastnym-klientam/")!), animated: true, completion: nil)
+        case .post:
+            let postCommentsViewController = PostCommentsViewController()
+            postCommentsViewController.postId = (item.data as! Post).id
+            navigationController?.pushViewController(postCommentsViewController, animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableViewAutomaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 150
     }
 }

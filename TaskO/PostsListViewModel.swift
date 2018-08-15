@@ -27,16 +27,23 @@ class PostsListViewModel {
             dispatchGroup.leave()
         }
         
-        dispatchGroup.notify(queue: .main){
-            for randomPost in self.randomPosts {
+        dispatchGroup.notify(queue: .main){ [weak self] in
+            guard let strongSelf = self else {
+                return
+            }
+            guard strongSelf.randomPosts.count != 0, strongSelf.weatherData.count != 0 else {
+                completion(false)
+                return
+            }
+            for randomPost in strongSelf.randomPosts {
                 let postViewModelItem = PostViewModelItem(data: randomPost)
-                self.items.append(postViewModelItem)
+                strongSelf.items.append(postViewModelItem)
             }
-            for weather in self.weatherData {
+            for weather in strongSelf.weatherData {
                 let postViewModelItem = PostViewModelItem(data: weather)
-                self.items.append(postViewModelItem)
+                strongSelf.items.append(postViewModelItem)
             }
-            self.items.shuffle()
+            strongSelf.items.shuffle()
             
             completion(true)
         }
@@ -48,6 +55,7 @@ class PostsListViewModel {
                 return
             }
             guard success else{
+                completion(success)
                 return
             }
             
@@ -63,7 +71,9 @@ class PostsListViewModel {
             guard let strongSelf = self else {
                 return
             }
+
             guard success else{
+                completion(success)
                 return
             }
             strongSelf.weatherData = weather!

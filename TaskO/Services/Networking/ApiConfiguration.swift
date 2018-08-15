@@ -8,12 +8,11 @@
 
 import Alamofire
 
-
-
 let BASE_URL = "http://jsonplaceholder.typicode.com"
 let WEATHER_BASE_URL = "http://api.openweathermap.org"
 protocol ApiConfiguration: URLRequestConvertible{
     var method: HTTPMethod { get }
     var path: String { get }
     var parameters: Parameters? { get }
+    var queryItems: [URLQueryItem]? { get }
 }

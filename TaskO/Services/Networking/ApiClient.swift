@@ -59,4 +59,40 @@ class ApiClient {
             }
         }
     }
+    
+    func getComments(postId: Int, completion:@escaping (_ success: Bool, _ message: String, _ comments: Array<Comment>?)->Void) {
+        performRequest(route: PostsEndPoint.getComments(postId: postId)) { (result) in
+            switch result {
+            case .success(let data):
+                let comments = Mapper<Comment>().mapArray(JSONObject: data)
+                completion(true, "", comments)
+            case .failure(let error):
+                completion(false, error.localizedDescription, nil)
+            }
+        }
+    }
+    
+    func getAlbums(completion:@escaping (_ success: Bool, _ message: String, _ albums: Array<Album>?) -> Void) {
+        performRequest(route: AlbumsEndPoint.getAlbums) { (result) in
+            switch result {
+            case .success(let data):
+                let albums = Mapper<Album>().mapArray(JSONObject: data)
+                completion(true, "", albums)
+            case .failure(let error):
+                completion(false, error.localizedDescription, nil)
+            }
+        }
+    }
+    
+    func getPhotos(albumId: Int, completion:@escaping (_ success: Bool, _ message: String, _ photos: Array<Photo>?)->Void) {
+        performRequest(route: AlbumsEndPoint.getPhotos(albumId: albumId)) { (result) in
+            switch result{
+            case .success(let data):
+                let photos = Mapper<Photo>().mapArray(JSONObject: data)
+                completion(true, "", photos)
+            case .failure(let error):
+                completion(false, error.localizedDescription, nil)
+            }
+        }
+    }
 }
